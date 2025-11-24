@@ -1,12 +1,13 @@
 """
 Django settings for PuntoVenta project.
 """
+
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
 load_dotenv(ENV_PATH, override=True)
@@ -15,8 +16,13 @@ SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-ru2b9_m4llnw(2bkhsiht(slvkl!s=k=imp_i_41*q9fsnwd$m"
 )
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+
+
+DEBUG = os.getenv("DEBUG", "1") == "1"
+
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -33,16 +39,14 @@ INSTALLED_APPS = [
     "rest_framework",
 ]
 
+
 REST_FRAMEWORK = {
-    # JWT por defecto
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    # 🔥 Todo endpoint API requiere login
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
@@ -53,8 +57,10 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -65,11 +71,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "PuntoVenta.urls"
 
-# ✅ ESTE BLOQUE ES OBLIGATORIO PARA ADMIN Y PARA EL LOGIN DEL BROWSABLE API
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],   # si quieres templates globales, pon BASE_DIR / "templates"
+        "DIRS": [],  
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,11 +90,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "PuntoVenta.wsgi.application"
 
-# ---------------------------------------------------------------------------
-# DATABASES
-#   - SQLite local por defecto
-#   - Postgres remoto si USE_REMOTE_DB=1
-# ---------------------------------------------------------------------------
+
 USE_REMOTE_DB = os.getenv("USE_REMOTE_DB", "0") == "1"
 
 if USE_REMOTE_DB:
@@ -115,17 +117,27 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-# ---------------------------------------------------------------------------
+
 
 LANGUAGE_CODE = "es-mx"
 TIME_ZONE = "America/Mexico_City"
 USE_I18N = True
 USE_TZ = True
 
+
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR / "staticfiles"  
+
+
+if (BASE_DIR / "static").exists():
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+else:
+    STATICFILES_DIRS = []
+
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
