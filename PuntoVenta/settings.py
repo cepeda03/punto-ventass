@@ -1,13 +1,13 @@
 """
 Django settings for PuntoVenta project.
 """
-
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
 load_dotenv(ENV_PATH, override=True)
@@ -17,11 +17,9 @@ SECRET_KEY = os.getenv(
     "django-insecure-ru2b9_m4llnw(2bkhsiht(slvkl!s=k=imp_i_41*q9fsnwd$m"
 )
 
-
 DEBUG = os.getenv("DEBUG", "1") == "1"
-
-
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+
 
 
 INSTALLED_APPS = [
