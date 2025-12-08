@@ -1,5 +1,5 @@
 """
-Django settings for PuntoVenta project.
+Django settings for Adopcion de mascotas project.
 """
 from pathlib import Path
 import os
