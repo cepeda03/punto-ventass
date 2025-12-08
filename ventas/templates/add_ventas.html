@@ -6,19 +6,20 @@
 
 {% block content %}
 
+<!-- Modal: Mascotas -->
 <div id="MaterialesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Agregar Material</h3>
+                <h3 class="modal-title text-dark">Seleccionar Mascota</h3>
             </div>
             <div class="modal-body" style="overflow:scroll; max-height: 450px;">
                 <table class="table table-hover" id="myTable">
                     <thead>
                         <tr>
                             <th># ID</th>
-                            <th>Descripción</th>
-                            <th>Precio $</th>
+                            <th>Nombre / Descripción</th>
+                            <th>Aporte sugerido {{moneda}}</th>
                             <th>Agregar</th>
                         </tr>
                     </thead>
@@ -27,7 +28,7 @@
                         <tr>
                             <td>{{i.id}}</td>
                             <td>{{i.descripcion}}</td>
-                            <td>$ {{i.precio}}</td>
+                            <td>{{moneda}} {{i.precio}}</td>
                             <td>
                                 <button onclick="addProductList('{{i.id}}', '{{i.descripcion}}','{{i.precio}}')"
                                     class="btn btn-success" data-dismiss="modal" type="button">
@@ -48,11 +49,13 @@
         </div>
     </div>
 </div>
+
+<!-- Modal: Adoptantes -->
 <div id="ClientesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Seleccionar Cliente</h3>
+                <h3 class="modal-title text-dark">Seleccionar Adoptante</h3>
             </div>
             <div class="modal-body" style="overflow:scroll; max-height: 450px;">
                 <table class="table table-hover" id="table2">
@@ -60,7 +63,7 @@
                         <tr>
                             <th># ID</th>
                             <th>Nombre</th>
-                            <th>Telefono</th>
+                            <th>Teléfono</th>
                             <th>Seleccionar</th>
                         </tr>
                     </thead>
@@ -90,11 +93,13 @@
         </div>
     </div>
 </div>
+
+<!-- Modal: Confirmación -->
 <div id="ConfirmacionModal" class="modal bd-example-modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Confirmar Pago</h3>
+                <h3 class="modal-title text-dark">Confirmar Aporte / Donación</h3>
             </div>
             <div class="modal-body" style="overflow:scroll; max-height: 450px;">
                 <table class="table table-hover">
@@ -133,21 +138,24 @@
                     Cerrar
                     <i class="fas fa-window-close"></i>
                 </button>
-                <button onclick="saveData()" id="btn" class="btn btn-success btn-lg">Agregar Venta <i
-                        class="fas fa-money-bill"></i></button>
+                <button onclick="saveData()" id="btn" class="btn btn-success btn-lg">
+                    Registrar Solicitud <i class="fas fa-paw"></i>
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Barra superior -->
 <div class="row mt-5">
     <div class="col-4">
         <div class="input-group">
             <div class="input-group-append pr-1">
-                <h6>Impresión: </h6>
+                <h6>Documento: </h6>
             </div>
             <select required name="impresion" class="form-control border border-dark bg-secondary text-white"
                 id="impresion">
-                <option value="1" selected>Ticket</option>
+                <option value="1" selected>Comprobante</option>
                 <option value="2" selected>Tamaño carta</option>
             </select>
         </div>
@@ -171,11 +179,13 @@
         </div>
     </div>
 </div>
+
+<!-- Adoptante -->
 <div class="row mt-5">
     <div class="col-12">
         <div class="input-group" id="div-cliente">
             <div class="input-group-append pr-1">
-                <h6>Cliente: </h6><input type="hidden" name="id_cliente" id="id_cliente" value="1" readonly>
+                <h6>Adoptante: </h6><input type="hidden" name="id_cliente" id="id_cliente" value="1" readonly>
             </div>
             <input type="text" class="form-control border border-dark text-white bg-secondary"
                 value="{{cliente.nombre}}" id="cliente" name="cliente" readonly>
@@ -187,24 +197,30 @@
         </div>
     </div>
 </div>
+
+<!-- Buscar mascota -->
 <div class="row mt-5">
     <div class="col-md-12 pb-2 mb-2">
         <div class="input-group">
             <div class="input-group-append mr-2">
-                Agregar producto:
+                Agregar mascota:
             </div>
-            <input type="text" class="form-control border border-dark" placeholder="Ingrese una descripcion" id="search"
-                name="search">
+            <input type="text" class="form-control border border-dark" placeholder="Ingrese un nombre o descripción"
+                id="search" name="search">
             <div class="input-group-append">
-                <button onclick="borrarContent()" class="btn btn-outline-danger" type="button"><i
-                        class="fas fa-window-close"></i></button>
+                <button onclick="borrarContent()" class="btn btn-outline-danger" type="button">
+                    <i class="fas fa-window-close"></i>
+                </button>
                 <a class="btn btn-primary ml-2 border border-dark" href="#MaterialesModal" data-toggle="modal"
-                    data-dismiss="modal"><i class="nav-icon fas fa-boxes"></i>
+                    data-dismiss="modal">
+                    <i class="nav-icon fas fa-paw"></i>
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Tabla -->
 <div class="row mt-5">
     <link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
     <script src="{% static 'index/js/b4.js' %}"></script>
@@ -213,9 +229,9 @@
             <thead>
                 <tr>
                     <th>Quitar</th>
-                    <th>Descripción</th>
+                    <th>Mascota</th>
                     <th>Cantidad</th>
-                    <th>Precio {{moneda}}</th>
+                    <th>Aporte {{moneda}}</th>
                     <th>Subtotal {{moneda}}</th>
                 </tr>
             </thead>
@@ -224,45 +240,42 @@
         </table>
     </div>
 </div>
+
+<!-- Total -->
 <div class="row mt-3">
     <div class="col-11 text-right">
-        <h5 class="text-danger font-weight-bold" id="total"> Total: $0.00 </h5>
-    </div>
-</div>
-<div class="row text-center mt-4">
-    <div class="col-12">
-        <button data-toggle="modal" href="#ConfirmacionModal" class="btn btn-success btn-block">Agregar Venta <i
-                class="fas fa-money-bill"></i></button>
+        <h5 class="text-danger font-weight-bold" id="total"> Total: {{moneda}} 0.00 </h5>
     </div>
 </div>
 
+<!-- Botón -->
+<div class="row text-center mt-4">
+    <div class="col-12">
+        <button data-toggle="modal" href="#ConfirmacionModal" class="btn btn-success btn-block">
+            Registrar Solicitud <i class="fas fa-paw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Observaciones -->
 <div class="row">
     <div class="col-md-12">
         <p>
-            <label for="comentarios" class="form-control">Comentarios: </label>
+            <label for="comentarios" class="form-control">Observaciones: </label>
             <textarea class="form-control border border-dark bg-secondary text-white" id="comentarios"
                 name="comentarios" rows="2" cols="6"></textarea>
-
     </div>
 </div>
 
 <script>
     var tableProducts;
-    // Verts variable
     var verts = {
-        items: {
-            total: 0.00,
-            products: []
-        },
+        items: { total: 0.00, products: [] },
+
         calculate: function () {
-            // Calcular subtotal 
             calculatedtotal = 0;
-
             $.each(this.items.products, function (pos, dict) {
-
                 calculatedtotal = parseFloat(calculatedtotal) + parseFloat(dict.subtotal);
-
-
             });
             this.items.total = parseFloat(calculatedtotal)
             document.getElementById("total").innerHTML = "Total {{moneda}}" + parseFloat(this.items.total).toFixed(2);
@@ -312,18 +325,12 @@
                     },
                 ],
                 destroy: true,
-                "language": {
-                    "url": "{% static 'index/js/idiom.json' %}"
-                },
+                "language": { "url": "{% static 'index/js/idiom.json' %}" },
                 "lengthMenu": [[10, 25, 50], [10, 25, 50]],
-                rowCallback(row, data, displayNum, displayIndex, dataIndex) {
-                    //console.log(data);
-
-                },
             });
         },
-
     };
+
     // Autocomplete
     $(function () {
         $("#search").autocomplete({
@@ -339,23 +346,19 @@
                     dataType: 'json',
                 }).done(function (data) {
                     response(data);
-                }).fail(
-                    function (jqXHR, textStatus, errorThrown) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: textStatus,
-                            footer: errorThrown
-                        })
-                    }).always(
-                        function (data) {
-                        });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: textStatus,
+                        footer: errorThrown
+                    })
+                });
             },
             delay: 300,
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                console.clear();
                 producto = {
                     id: ui.item.id,
                     descripcion: ui.item.descripcion,
@@ -371,49 +374,26 @@
         });
     });
 
-    // Gudardar datos
+    // Guardar datos
     function saveData() {
-       if (document.getElementById("fecha").value == ''){
-        Swal.fire({
-                icon: 'error',
-                title: '',
-                text: "Fecha no válida",
-            });
-            //alert('{{last_id}}');
-            return
-
-       }
-       if (document.getElementById("cliente").value == ''){
-        Swal.fire({
-                icon: 'error',
-                title: '',
-                text: "Cliente no válido",
-            });
-            //alert('{{last_id}}');
-            return
-
-       }
-        if (parseFloat(verts.items.total) == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: '',
-                text: "No hay ningún producto agregado a la lista",
-            });
-            //alert('{{last_id}}');
+        if (document.getElementById("fecha").value == '') {
+            Swal.fire({ icon: 'error', title: '', text: "Fecha no válida" });
             return
         }
-      
+        if (document.getElementById("cliente").value == '') {
+            Swal.fire({ icon: 'error', title: '', text: "Adoptante no válido" });
+            return
+        }
+        if (parseFloat(verts.items.total) == 0) {
+            Swal.fire({ icon: 'error', title: '', text: "No hay ninguna mascota agregada a la solicitud" });
+            return
+        }
+
         activarEspera();
         let desglosar;
         const cb = document.querySelector('#desglosar');
-        if (cb.checked == true){
-            desglosar = 1;
-            
-        }
-        else{
-            desglosar = 0;
-        }
-        //alert(desglosar);
+        desglosar = (cb.checked == true) ? 1 : 0;
+
         $.ajax({
             url: "{% url 'AddVenta' %}",
             type: 'POST',
@@ -435,69 +415,46 @@
             },
             dataType: 'json',
         }).done(function (data) {
-            if (data[1] == true){
+            if (data[1] == true) {
                 window.open("{% url 'ExportPDF' %}" + data[0] + "/" + data[2], '_blank');
                 location.reload();
             }
-            //window.open("{% url 'ExportPDF' %}" + data[0], '_blank');
-            //location.reload();
-        }).fail(
-            function (jqXHR, textStatus, errorThrown) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: textStatus,
-                    footer: errorThrown
-                })
-            }).always(
-                function (data) {
-                });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: textStatus,
+                footer: errorThrown
+            })
+        });
     }
 
     $('#tableProducts tbody')
-        // Remover item
         .on('click', 'a[rel="remove"]', function () {
             var tr = tableProducts.cell($(this).closest('td, li')).index();
             verts.items.products.splice(tr.row, 1);
             verts.list();
             verts.calculate();
-
         })
-        // Cambio de cantidad
         .on('change', "input[name='cant']", function () {
-            console.clear();
             let cant = parseInt($(this).val());
-            if (isNaN(cant)) {
-                cant = 0;
-                //$(this).val(cant);
-            }
+            if (isNaN(cant)) { cant = 0; }
             var tr = tableProducts.cell($(this).closest('td, li')).index();
-            //console.log(tr);
-            //var data = tableProducts.row(tr.row).data();
-            //console.log(data);
             verts.items.products[tr.row].cantidad = cant;
             verts.items.products[tr.row].subtotal = parseFloat(verts.items.products[tr.row].precio) * parseFloat(cant);
             verts.calculate();
             verts.list();
         })
-        // Cambio de precio
         .on('change', "input[name='price']", function () {
-            console.clear();
             let precioE = parseFloat($(this).val());
-            if (isNaN(precioE)) {
-                precioE = 0;
-                //$(this).val(cant);
-            }
+            if (isNaN(precioE)) { precioE = 0; }
             var tr = tableProducts.cell($(this).closest('td, li')).index();
-            //console.log(tr);
-            //var data = tableProducts.row(tr.row).data();
-            //console.log(data);
             verts.items.products[tr.row].precio = precioE;
             verts.items.products[tr.row].subtotal = parseFloat(verts.items.products[tr.row].cantidad) * parseFloat(precioE);
             verts.calculate();
             verts.list();
         })
-    // Agregar desde lista 
+
     function addProductList(id_producto, descripcion_producto, precio_producto) {
         producto = {
             id: id_producto,

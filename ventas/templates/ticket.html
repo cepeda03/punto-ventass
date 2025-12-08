@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ticket de Venta</title>
+    <title>Comprobante de Solicitud de Adopción</title>
     <style>
         @page {
             size: 58mm 200mm;
@@ -18,62 +18,60 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <img src="{{empresa.imagen.url}}" alt="Logo empresa" width="30" height="3"> <br>
-                # Ticket: {{num_ticket}} <br>
+                {% if empresa.imagen %}
+                    <img src="{{empresa.imagen.url}}" alt="Logo" width="30" height="30"><br>
+                {% else %}
+                    <img src="{% static 'index/img/logo.png' %}" alt="Logo" width="30" height="30"><br>
+                {% endif %}
+
+                # Solicitud: {{num_ticket}} <br>
                 Fecha: {{fecha}} <br>
-                <h5> <b>{{empresa.nombre}} </b></h5>
+
+                <h5><b>{{empresa.nombre}}</b></h5>
                 {{empresa.domicilio}} <br>
                 {{empresa.telefono}}<br>
-                Cliente: {{cliente}} <br>
-                <br>
+
+                Adoptante: {{cliente}} <br><br>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12 text-center">
                 <table>
                     <thead>
                         <tr>
-                            <td style="width:20%"> <b>Cant.</b></td>
-                            <td style="width:60%"> <b> Producto</b> </td>
-                            <td style="width:20%"> <b>Subtotal</b>  </td>
+                            <td style="width:20%"><b>Cant.</b></td>
+                            <td style="width:60%"><b>Mascota</b></td>
+                            <td style="width:20%"><b>Subtotal</b></td>
                         </tr>
                     </thead>
+
                     <tbody class="text-dark">
-                        {% if iva == "false" or iva == "False" %}
                         {% for i in items %}
                         <tr>
                             <td>{{i.cantidad}}</td>
                             <td>{{i.producto.descripcion}}</td>
-                            <td>{{empresa.moneda}} {{i.total|intcomma}}</td>
-
+                            <td>{{empresa.moneda}} {{ i.subtotal|default:i.total|default:"0"|intcomma }}</td>
                         </tr>
                         {% endfor %}
-                        {% elif iva == "true" or iva == "True" %}
-                        {% for i in items %}
-                        <tr>
-                            <td>{{i.cantidad}}</td>
-                            <td>{{i.producto.descripcion}}</td>
-                            <td>{{empresa.moneda}} {{i.subtotal|intcomma}}</td>
-
-                        </tr>
-                        {% endfor %}
-                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12">
                 {% if iva == "true" or iva == "True" %}
-                <h5 style="text-align: right;"> <b> Subtotal: {{empresa.moneda}} {{subtotal|floatformat:"2"|intcomma}}</b></h5>
-                <h5 style="text-align: right;"> <b> Iva: {{empresa.moneda}} {{iva_suma|floatformat:"2"|intcomma}}</b></h5>
+                <h5 style="text-align: right;"><b>Subtotal: {{empresa.moneda}} {{subtotal|floatformat:"2"|intcomma}}</b></h5>
+                <h5 style="text-align: right;"><b>IVA: {{empresa.moneda}} {{iva_suma|floatformat:"2"|intcomma}}</b></h5>
                 {% endif %}
-                <h5 style="text-align: right;"> <b> Total: {{empresa.moneda}} {{total|floatformat:"2"|intcomma}}</b></h5>
+                <h5 style="text-align: right;"><b>Total: {{empresa.moneda}} {{total|floatformat:"2"|intcomma}}</b></h5>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12">
-                <p style="text-align: center;">GRACIAS POR SU PREFERENCIA</P>
+                <p style="text-align: center;">GRACIAS POR APOYAR LA ADOPCIÓN RESPONSABLE</p>
             </div>
         </div>
     </div>
