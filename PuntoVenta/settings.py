@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "ventas",
+    "Solicitudes",
     "widget_tweaks",
     "django.contrib.humanize",
 

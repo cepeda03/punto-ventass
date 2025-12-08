@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ventas.models import Cliente, Producto, Empresa
+from Solicitudes.models import Cliente, Producto, Empresa
 
 
 # Register your models here.

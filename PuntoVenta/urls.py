@@ -22,10 +22,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     
-    path("", include("ventas.urls")),
+    path("", include("Solicitudes.urls")),
 
     
-    path("api/", include("ventas.api_urls")),
+    path("api/", include("Solicitudes.api_urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

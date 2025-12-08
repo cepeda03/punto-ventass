@@ -51,7 +51,7 @@
 </div>
 
 <!-- Modal: Adoptantes -->
-<div id="ClientesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
+<div id="AdoptantesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -68,7 +68,7 @@
                         </tr>
                     </thead>
                     <tbody class="text-dark">
-                        {% for i in clientes_lista %}
+                        {% for i in Adoptantes_lista %}
                         <tr>
                             <td>{{i.id}}</td>
                             <td>{{i.nombre}}</td>
@@ -190,7 +190,7 @@
             <input type="text" class="form-control border border-dark text-white bg-secondary"
                 value="{{cliente.nombre}}" id="cliente" name="cliente" readonly>
             <div class="input-group-append">
-                <a class="btn btn-primary" href="#ClientesModal" data-toggle="modal" data-dismiss="modal">
+                <a class="btn btn-primary" href="#AdoptantesModal" data-toggle="modal" data-dismiss="modal">
                     <i class="fas fa-user-edit"></i>
                 </a>
             </div>
@@ -362,7 +362,7 @@
                 producto = {
                     id: ui.item.id,
                     descripcion: ui.item.descripcion,
-                    cantidad: 1,
+                    Disponibles: 1,
                     precio: ui.item.precio,
                     subtotal: ui.item.precio
                 }
@@ -459,7 +459,7 @@
         producto = {
             id: id_producto,
             descripcion: descripcion_producto,
-            cantidad: 1,
+            Disponibles: 1,
             precio: precio_producto,
             subtotal: precio_producto,
         }

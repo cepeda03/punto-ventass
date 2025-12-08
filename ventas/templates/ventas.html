@@ -29,11 +29,11 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-center">Ventas <i class="fas fa-hand-holding-usd"></i></h3>
+            <h3 class="text-center">Solicitudes <i class="fas fa-hand-holding-usd"></i></h3>
             <div class="col-md-3 pb-2">
                 <a href="{% url 'AddVenta' %}">
                     <button type="button" class="btn btn-success">
-                        Agregar Venta
+                        Registrar Solicitud
                         <i class="fas fa-plus-circle"></i>
                     </button>
                 </a>
@@ -52,13 +52,13 @@
                         <th>Fecha</th>
                         <th>Cliente</th>
                         <th>Total $</th>
-                        <th>¿Pagado?</th>
+                        <th>¿Aporte recibido?</th>
                         <th>Comentarios</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-dark">
-                    {% for i in ventas %}
+                    {% for i in Solicitudes %}
                     <tr>
                         <td>{{i.id}}</td>
                         <td>{{i.fecha_pedido}}</td>

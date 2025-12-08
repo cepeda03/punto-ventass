@@ -12,7 +12,7 @@ from .forms import (
 )
 
 from rest_framework import viewsets, permissions
-from .serializers import ClienteSerializer, ProductoSerializer, EgresoSerializer
+from .serializers import Adoptanteserializer, ProductoSerializer, EgresoSerializer
 
 
 # -----------------------------
@@ -21,7 +21,7 @@ from .serializers import ClienteSerializer, ProductoSerializer, EgresoSerializer
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all().order_by("id")
-    serializer_class = ClienteSerializer
+    serializer_class =Adoptanteserializer
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -48,12 +48,12 @@ def adopciones_view(request):
     adopciones = Egreso.objects.all()
     num_adopciones = adopciones.count()
     context = {
-        "ventas": adopciones,          # compatibilidad si tu template usa ventas
-        "num_ventas": num_adopciones,  # compatibilidad
+        "Solicitudes": adopciones,          # compatibilidad si tu template usa Solicitudes
+        "num_Solicitudes": num_adopciones,  # compatibilidad
         "adopciones": adopciones,
         "num_adopciones": num_adopciones
     }
-    return render(request, "ventas.html", context)
+    return render(request, "Solicitudes.html", context)
 
 
 def adoptantes_view(request):
@@ -64,12 +64,12 @@ def adoptantes_view(request):
     form_add = AddClienteForm()
     form_editar = EditarClienteForm()
     context = {
-        "clientes": adoptantes,  # compatibilidad
+        "Adoptantes": adoptantes,  # compatibilidad
         "adoptantes": adoptantes,
         "form_personal": form_add,
         "form_editar": form_editar,
     }
-    return render(request, "clientes.html", context)
+    return render(request, "Adoptantes.html", context)
 
 
 def add_adoptante_view(request):
@@ -83,7 +83,7 @@ def add_adoptante_view(request):
                 messages.error(request, "Error al guardar el adoptante")
         else:
             messages.error(request, "Formulario inválido")
-    return redirect("Clientes")
+    return redirect("Adoptantes")
 
 
 def edit_adoptante_view(request):
@@ -95,7 +95,7 @@ def edit_adoptante_view(request):
             messages.success(request, "Adoptante actualizado correctamente")
         else:
             messages.error(request, "Formulario inválido")
-    return redirect("Clientes")
+    return redirect("Adoptantes")
 
 
 def delete_adoptante_view(request):
@@ -103,7 +103,7 @@ def delete_adoptante_view(request):
         adoptante = Cliente.objects.get(pk=request.POST.get("id_personal_eliminar"))
         adoptante.delete()
         messages.success(request, "Adoptante eliminado")
-    return redirect("Clientes")
+    return redirect("Adoptantes")
 
 
 def mascotas_view(request):
@@ -171,7 +171,7 @@ class add_adopcion(ListView):
     """
     Registrar solicitud/adopción (modelo real: Egreso)
     """
-    template_name = "add_ventas.html"
+    template_name = "add_Solicitudes.html"
     model = Egreso
 
     def post(self, request, *args, **kwargs):
@@ -243,7 +243,7 @@ class add_adopcion(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["productos_lista"] = Producto.objects.all()  # compatibilidad
-        context["clientes_lista"] = Cliente.objects.all()    # compatibilidad
+        context["Adoptantes"] = Cliente.objects.all()    # compatibilidad
         context["mascotas_lista"] = Producto.objects.all()
         context["adoptantes_lista"] = Cliente.objects.all()
         return context

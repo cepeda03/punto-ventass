@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ventas', '0002_producto_precio_alter_cliente_nombre_and_more'),
+        ('Solicitudes', '0002_producto_precio_alter_cliente_nombre_and_more'),
     ]
 
     operations = [
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('ticket', models.BooleanField(default=True)),
                 ('desglosar', models.BooleanField(default=True)),
                 ('updated', models.DateTimeField(auto_now_add=True, null=True)),
-                ('cliente', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='clientee', to='ventas.cliente')),
+                ('cliente', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='clientee', to='Solicitudes.cliente')),
             ],
             options={
                 'verbose_name': 'egreso',
@@ -43,8 +43,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('entregado', models.BooleanField(default=True)),
                 ('devolucion', models.BooleanField(default=False)),
-                ('egreso', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ventas.egreso')),
-                ('producto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ventas.producto')),
+                ('egreso', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Solicitudes.egreso')),
+                ('producto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Solicitudes.producto')),
             ],
             options={
                 'verbose_name': 'producto egreso',

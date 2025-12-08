@@ -30,7 +30,7 @@ urlpatterns = [
 
     # WEB (mantengo los names antiguos para no romper templates)
     path("", views.adopciones_view, name="Venta"),
-    path("clientes/", views.adoptantes_view, name="Clientes"),
+    path("Adoptantes/", views.adoptantes_view, name="Adoptantes"),
     path("add_cliente/", views.add_adoptante_view, name="AddCliente"),
     path("edit_cliente/", views.edit_adoptante_view, name="EditCliente"),
     path("delete_cliente/", views.delete_adoptante_view, name="DeleteCliente"),

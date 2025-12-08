@@ -11,8 +11,8 @@ class Cliente(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name='clientes'
-        verbose_name_plural = 'clientes'
+        verbose_name='Adoptantes'
+        verbose_name_plural = 'Adoptantes'
     
     def __str__(self):
         return self.nombre

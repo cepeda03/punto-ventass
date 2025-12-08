@@ -1,6 +1,6 @@
 from django.forms import Widget
 from django import forms
-from ventas.models import Cliente, Producto
+from Solicitudes.models import Cliente, Producto
 
 
 
@@ -38,10 +38,10 @@ class AddProductoForm (forms.ModelForm):
         fields = ('codigo', 'descripcion', 'imagen', 'costo', 'precio', 'cantidad')
         labels = {
             'codigo': 'Cód. Barras: ', 
-            'descripcion': 'Descripción de producto: ',
+            'descripcion': 'Descripción de mascota: ',
             'imagen': 'Imagen: ',
-            'costo': 'Costo $: ',
-            'precio': 'Precio $: ',
+            'costo': 'Costos (refugio) $: ',
+            'precio': 'Aporte sugerido $: ',
             'cantidad': 'Cantidad : ',
         }
 
@@ -51,10 +51,10 @@ class EditarProductoForm(forms.ModelForm):
         fields = ('codigo', 'descripcion', 'imagen', 'costo', 'precio', 'cantidad')
         labels = {
             'codigo': 'Cód. Barras: ', 
-            'descripcion': 'Descripción de producto: ',
+            'descripcion': 'Descripción de mascota: ',
             'imagen': 'Imagen: ',
-            'costo': 'Costo $: ',
-            'precio': 'Precio $: ',
+            'costo': 'Costos (refugio) $: ',
+            'precio': 'Aporte sugerido $: ',
             'cantidad': 'Cantidad : ',
             }
         widgets = {
