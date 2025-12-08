@@ -1,6 +1,3 @@
-"""
-Django settings for Adopcion de mascotas project.
-"""
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -8,18 +5,16 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH, override=True)
+
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-ru2b9_m4llnw(2bkhsiht(slvkl!s=k=imp_i_41*q9fsnwd$m"
 )
 
 DEBUG = os.getenv("DEBUG", "1") == "1"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
-
-
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "*").split(",") if h.strip()]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -29,13 +24,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "Solicitudes",
+    # App real
+    "ventas",
+
     "widget_tweaks",
     "django.contrib.humanize",
 
     "rest_framework",
+    "rest_framework.authtoken",
 ]
-
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -54,10 +51,9 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -68,11 +64,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "PuntoVenta.urls"
 
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],  
+        "DIRS": [BASE_DIR / "templates"],   # recomendado
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -86,7 +81,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "PuntoVenta.wsgi.application"
-
 
 USE_REMOTE_DB = os.getenv("USE_REMOTE_DB", "0") == "1"
 
@@ -115,22 +109,18 @@ else:
         }
     }
 
-
 LANGUAGE_CODE = "es-mx"
-TIME_ZONE = "America/Mexico_City"
+TIME_ZONE = "America/Santiago"
 USE_I18N = True
 USE_TZ = True
 
-
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 if (BASE_DIR / "static").exists():
     STATICFILES_DIRS = [BASE_DIR / "static"]
 else:
     STATICFILES_DIRS = []
-
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

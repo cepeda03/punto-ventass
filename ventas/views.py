@@ -16,12 +16,12 @@ from .serializers import Adoptanteserializer, ProductoSerializer, EgresoSerializ
 
 
 # -----------------------------
-# API (sin cambios en modelos)
+# API
 # -----------------------------
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all().order_by("id")
-    serializer_class =Adoptanteserializer
+    serializer_class = Adoptanteserializer
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -38,38 +38,35 @@ class EgresoViewSet(viewsets.ModelViewSet):
 
 
 # -----------------------------
-# Vistas Web (renombrado UI)
+# Vistas Web
 # -----------------------------
 
 def adopciones_view(request):
-    """
-    Listado de adopciones / solicitudes (modelo real: Egreso)
-    """
+    # ✅ tu template real se llama ventas.html
     adopciones = Egreso.objects.all()
     num_adopciones = adopciones.count()
     context = {
-        "Solicitudes": adopciones,          # compatibilidad si tu template usa Solicitudes
-        "num_Solicitudes": num_adopciones,  # compatibilidad
+        "Solicitudes": adopciones,
+        "num_Solicitudes": num_adopciones,
         "adopciones": adopciones,
         "num_adopciones": num_adopciones
     }
-    return render(request, "Solicitudes.html", context)
+    return render(request, "ventas.html", context)  # ✅ antes: "Solicitudes.html"
 
 
 def adoptantes_view(request):
-    """
-    Adoptantes (modelo real: Cliente)
-    """
+    # ✅ tu template real se llama clientes.html
     adoptantes = Cliente.objects.all()
     form_add = AddClienteForm()
     form_editar = EditarClienteForm()
     context = {
-        "Adoptantes": adoptantes,  # compatibilidad
+        "Adoptantes": adoptantes,
         "adoptantes": adoptantes,
+        "clientes": adoptantes,   # extra por compatibilidad si el html usa "clientes"
         "form_personal": form_add,
         "form_editar": form_editar,
     }
-    return render(request, "Adoptantes.html", context)
+    return render(request, "clientes.html", context)  # ✅ antes: "Adoptantes.html"
 
 
 def add_adoptante_view(request):
@@ -83,7 +80,7 @@ def add_adoptante_view(request):
                 messages.error(request, "Error al guardar el adoptante")
         else:
             messages.error(request, "Formulario inválido")
-    return redirect("Adoptantes")
+    return redirect("Clientes")  # ✅ antes: "Adoptantes"
 
 
 def edit_adoptante_view(request):
@@ -95,7 +92,7 @@ def edit_adoptante_view(request):
             messages.success(request, "Adoptante actualizado correctamente")
         else:
             messages.error(request, "Formulario inválido")
-    return redirect("Adoptantes")
+    return redirect("Clientes")  # ✅ antes: "Adoptantes"
 
 
 def delete_adoptante_view(request):
@@ -103,18 +100,15 @@ def delete_adoptante_view(request):
         adoptante = Cliente.objects.get(pk=request.POST.get("id_personal_eliminar"))
         adoptante.delete()
         messages.success(request, "Adoptante eliminado")
-    return redirect("Adoptantes")
+    return redirect("Clientes")  # ✅ antes: "Adoptantes"
 
 
 def mascotas_view(request):
-    """
-    Mascotas disponibles (modelo real: Producto)
-    """
     mascotas = Producto.objects.all()
     form_add = AddProductoForm()
     form_editar = EditarProductoForm()
     context = {
-        "productos": mascotas,  # compatibilidad
+        "productos": mascotas,
         "mascotas": mascotas,
         "form_add": form_add,
         "form_editar": form_editar
@@ -157,9 +151,6 @@ def delete_mascota_view(request):
 
 
 def delete_adopcion_view(request):
-    """
-    Eliminar solicitud/adopción (modelo real: Egreso)
-    """
     if request.method == "POST":
         adopcion = Egreso.objects.get(pk=request.POST.get("id_producto_eliminar"))
         adopcion.delete()
@@ -168,17 +159,14 @@ def delete_adopcion_view(request):
 
 
 class add_adopcion(ListView):
-    """
-    Registrar solicitud/adopción (modelo real: Egreso)
-    """
-    template_name = "add_Solicitudes.html"
+    # ✅ tu template real se llama add_ventas.html
+    template_name = "add_ventas.html"  # ✅ antes: "add_Solicitudes.html"
     model = Egreso
 
     def post(self, request, *args, **kwargs):
         try:
             action = request.POST.get("action")
 
-            # Autocomplete de mascotas (Producto)
             if action == "autocomplete":
                 data = []
                 term = request.POST.get("term", "")
@@ -188,7 +176,6 @@ class add_adopcion(ListView):
                     data.append(item)
                 return JsonResponse(data, safe=False)
 
-            # Guardar solicitud
             elif action == "save":
                 total_aporte = (
                     float(request.POST.get("efectivo", 0)) +
@@ -231,28 +218,23 @@ class add_adopcion(ListView):
                         iva=float(p.get("iva", 0)),
                     )
 
-                # ✅ IMPORTANTE: tu JS espera [id, true, iva]
                 return JsonResponse([nueva_solicitud.id, True, str(desglosar_iva)], safe=False)
 
-            else:
-                return JsonResponse({"error": "Acción no válida"}, safe=False)
+            return JsonResponse({"error": "Acción no válida"}, safe=False)
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["productos_lista"] = Producto.objects.all()  # compatibilidad
-        context["Adoptantes"] = Cliente.objects.all()    # compatibilidad
+        context["productos_lista"] = Producto.objects.all()
+        context["Adoptantes"] = Cliente.objects.all()
         context["mascotas_lista"] = Producto.objects.all()
         context["adoptantes_lista"] = Cliente.objects.all()
         return context
 
 
 def export_pdf_view(request, id=None, iva=None):
-    """
-    Genera comprobante (ticket.html). OJO: genera HTML con content_type PDF (como tu base).
-    """
     if id is None or iva is None:
         return redirect("Venta")
 
@@ -267,7 +249,6 @@ def export_pdf_view(request, id=None, iva=None):
         subtotal += float(i.subtotal)
         iva_suma += float(i.iva)
 
-    # ✅ empresa como dict para que ticket.html use empresa.nombre/moneda/etc
     empresa = {
         "nombre": "Fundación / Refugio",
         "domicilio": "Dirección del refugio",
