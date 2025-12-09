@@ -416,7 +416,7 @@
             dataType: 'json',
         }).done(function (data) {
             if (data[1] == true) {
-                window.open("{% url 'ExportPDF' %}" + data[0] + "/" + data[2], '_blank');
+
                 location.reload();
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {
